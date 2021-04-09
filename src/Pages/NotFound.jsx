@@ -1,9 +1,6 @@
-import React, { Component } from "react";
-import { useHistory } from "react-router-dom";
+import React from "react";
 
 function NotFound(props) {
-  const history = useHistory();
-
   return (
     <React.Fragment>
       <div className="container">

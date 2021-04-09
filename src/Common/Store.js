@@ -12,7 +12,6 @@ class Store {
       sessionStorage.getItem(this.__session_storage_key) != null &&
       sessionStorage.getItem(this.__session_storage_key) != undefined
     ) {
-      console.log("teet");
       res = JSON.parse(sessionStorage.getItem(this.__session_storage_key));
     }
     return res === null ? { data: [] } : res;

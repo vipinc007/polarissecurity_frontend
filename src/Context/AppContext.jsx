@@ -7,7 +7,7 @@ export const AppContextProvider = ({ children }) => {
   var [objectList, setObjectList] = useState([]);
 
   function get_taken_objects() {
-    if (objectList.length == 0) {
+    if (objectList.length === 0) {
       objectList = Store.getData().data;
     }
     return objectList;

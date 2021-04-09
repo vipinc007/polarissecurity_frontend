@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import ServiceWrapper from "../Services/ServiceWrapper";
-import Utils from "../Common/Utils";
 import AppSettings from "../Settings/AppSettings";
 import { AppContext } from "../Context/AppContext";
 
@@ -9,6 +8,7 @@ function ObjectManager() {
   var [loadError, setLoadError] = React.useState(false);
   var [objectList, setObjectList] = React.useState("");
   var [loading, setLoading] = React.useState(false);
+  var [processing, setProcessing] = React.useState(false);
 
   async function object_list() {
     setLoading(true);
@@ -22,30 +22,34 @@ function ObjectManager() {
   }
 
   async function object_get() {
+    setProcessing(true);
     var api_base_url = AppSettings.BACKEND_API_URL;
     let ret = await ServiceWrapper.doGet(api_base_url + "object/get");
     if (ret.data.result !== null) {
       appData.store_object(ret.data.result);
       await object_list();
     }
+    setProcessing(false);
   }
 
   async function object_create() {
     var api_base_url = AppSettings.BACKEND_API_URL;
-    let ret = await ServiceWrapper.doGet(api_base_url + "object/create");
+    await ServiceWrapper.doGet(api_base_url + "object/create");
     await object_list();
   }
 
   async function object_free(n) {
+    setProcessing(true);
     var api_base_url = AppSettings.BACKEND_API_URL;
-    let ret = await ServiceWrapper.doGet(api_base_url + "object/free/" + n);
+    await ServiceWrapper.doGet(api_base_url + "object/free/" + n);
     appData.remove_object(n);
     await object_list();
+    setProcessing(false);
   }
 
   async function object_reset() {
     var api_base_url = AppSettings.BACKEND_API_URL;
-    let ret = await ServiceWrapper.doGet(api_base_url + "object/reset");
+    await ServiceWrapper.doGet(api_base_url + "object/reset");
     appData.store_reset();
     await object_list();
   }
@@ -128,6 +132,7 @@ function ObjectManager() {
                               type="button"
                               className="btn btn-success btn-sm"
                               onClick={() => object_free(n)}
+                              disabled={processing}
                             >
                               Free
                             </button>
