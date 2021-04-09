@@ -8,7 +8,6 @@ function ObjectManager() {
   var [loadError, setLoadError] = React.useState(false);
   var [objectList, setObjectList] = React.useState("");
   var [loading, setLoading] = React.useState(false);
-  var [processing, setProcessing] = React.useState(false);
 
   async function object_list() {
     setLoading(true);
@@ -22,36 +21,40 @@ function ObjectManager() {
   }
 
   async function object_get() {
-    setProcessing(true);
+    setLoading(true);
     var api_base_url = AppSettings.BACKEND_API_URL;
     let ret = await ServiceWrapper.doGet(api_base_url + "object/get");
     if (ret.data.result !== null) {
       appData.store_object(ret.data.result);
       await object_list();
     }
-    setProcessing(false);
+    setLoading(false);
   }
 
   async function object_create() {
+    setLoading(true);
     var api_base_url = AppSettings.BACKEND_API_URL;
     await ServiceWrapper.doGet(api_base_url + "object/create");
     await object_list();
+    setLoading(false);
   }
 
   async function object_free(n) {
-    setProcessing(true);
+    setLoading(true);
     var api_base_url = AppSettings.BACKEND_API_URL;
     await ServiceWrapper.doGet(api_base_url + "object/free/" + n);
     appData.remove_object(n);
     await object_list();
-    setProcessing(false);
+    setLoading(false);
   }
 
   async function object_reset() {
+    setLoading(true);
     var api_base_url = AppSettings.BACKEND_API_URL;
     await ServiceWrapper.doGet(api_base_url + "object/reset");
     appData.store_reset();
     await object_list();
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -91,6 +94,7 @@ function ObjectManager() {
               </tbody>
             </table>
             <button
+              disabled={loading}
               onClick={() => object_create()}
               type="button"
               className="btn btn-success btn-sm"
@@ -99,6 +103,7 @@ function ObjectManager() {
             </button>
             &nbsp;
             <button
+              disabled={loading}
               onClick={() => object_get()}
               type="button"
               className="btn btn-primary btn-sm"
@@ -107,6 +112,7 @@ function ObjectManager() {
             </button>
             &nbsp;
             <button
+              disabled={loading}
               onClick={() => object_reset()}
               type="button"
               className="btn btn-secondary btn-sm"
@@ -132,7 +138,7 @@ function ObjectManager() {
                               type="button"
                               className="btn btn-success btn-sm"
                               onClick={() => object_free(n)}
-                              disabled={processing}
+                              disabled={loading}
                             >
                               Free
                             </button>
