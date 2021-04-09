@@ -17,7 +17,7 @@ function NotFound(props) {
           <hr />
           <p className="mb-0">
             If you are lost , Please click&nbsp;
-            <a href="/login">here</a>&nbsp;to login back
+            <a href="/">here</a>&nbsp;to go back to home page
           </p>
         </div>
       </div>
