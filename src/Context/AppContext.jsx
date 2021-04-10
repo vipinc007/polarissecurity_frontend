@@ -17,7 +17,6 @@ export const AppContextProvider = ({ children }) => {
     var tt = Store.getData();
     tt.data.push(obj);
     Store.setData(tt);
-    console.log(tt.data);
     setObjectList(tt.data);
   }
 
@@ -25,7 +24,6 @@ export const AppContextProvider = ({ children }) => {
     var tt = Store.getData();
     tt.data = tt.data.filter((item) => item !== obj);
     Store.setData(tt);
-    console.log(tt.data);
     setObjectList(tt.data);
   }
 
